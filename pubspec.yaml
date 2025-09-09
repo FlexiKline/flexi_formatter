@@ -1,5 +1,5 @@
 name: flexi_formatter
-version: 1.7.1
+version: 1.7.2
 description: A flexible and customizable Dart/Flutter library for formatting numbers, dates, and other data types.
 homepage: https://github.com/FlexiKline
 repository: https://github.com/FlexiKline/flexi_formatter

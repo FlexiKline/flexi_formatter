@@ -89,6 +89,12 @@ extension FlexiNumberFormatterIntExt on int {
 }
 
 extension FlexiNumberFormatterDecimalExt on Decimal {
+  String get sign => switch (signum) {
+        -1 => '-',
+        1 => '+',
+        _ => '',
+      };
+
   Decimal get half => (this / two).toDecimal(
         scaleOnInfinitePrecision: FlexiFormatter.scaleOnInfinitePrecision,
       );

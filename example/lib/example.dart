@@ -35,6 +35,12 @@ void printFormatNumber() {
   /// 0.1 => '10%'
   print(formatPercentage(0.1.d));
 
+  /// 0.1 => '+%10'
+  print(formatPercentage(0.1.d, showSign: true, percentSignFirst: true));
+
+  /// 0.1 => '%+10'
+  print(formatPercentage(0.1.d, showSign: true, signFirst: false, percentSignFirst: true));
+
   /// 1234567890.12345 => '$1,234,567,890.12'
   print(formatPrice(1234567890.12345.d, precision: 2, prefix: '\$'));
 
@@ -51,9 +57,9 @@ void printFormatNumber() {
     compactConverter: simplifiedChineseCompactConverter,
   ));
 
-  /// 1234567890.000000789 => '￥+1_2345_6789.0₆78元'
+  /// 1234567890.000000789 => '￥-1_2345_6789.0₆78元'
   print(formatNumber(
-    '123456789.000000789'.d,
+    '-123456789.000000789'.d,
     precision: 8,
     roundMode: RoundMode.truncate,
     cutInvalidZero: true,
@@ -62,11 +68,12 @@ void printFormatNumber() {
     groupCounts: 4,
     shrinkZeroMode: ShrinkZeroMode.subscript,
     showSign: true,
+    signFirst: false,
     prefix: '￥',
     suffix: '元',
   ));
 
-  /// 123456789.000000789 => '￥+1.2345.6789,0₆78元'
+  /// 123456789.000000789 => '+￥1.2345.6789,0₆78元'
   try {
     FlexiFormatter.setGlobalConfig(decimalSeparator: ',', groupSeparator: '.', groupCounts: 4);
     print(formatNumber(
@@ -77,6 +84,7 @@ void printFormatNumber() {
       enableGrouping: true,
       shrinkZeroMode: ShrinkZeroMode.subscript,
       showSign: true,
+      signFirst: true,
       prefix: '￥',
       suffix: '元',
     ));

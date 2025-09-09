@@ -1,3 +1,6 @@
+## 1.7.2
+- Add the rule of displaying positive and negative signs at the beginning
+
 ## 1.7.1
 - Support grouping for formatPercentage
 

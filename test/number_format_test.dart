@@ -133,6 +133,18 @@ void main() {
     result = formatPercentage(10.56.d, cutInvalidZero: true);
     print(result);
     expect(result, "1,056%");
+
+    result = formatPercentage(0.56.d, showSign: true);
+    print(result);
+    expect(result, "+56%");
+
+    result = formatPercentage(0.56.d, showSign: true, percentSignFirst: true);
+    print(result);
+    expect(result, "+%56");
+
+    result = formatPercentage(0.56.d, showSign: true, signFirst: false, percentSignFirst: true);
+    print(result);
+    expect(result, "%+56");
   });
 
   test('test formatPrice', () {
@@ -184,7 +196,7 @@ void main() {
     print('=====formatNumber=====');
 
     var result = formatNumber(
-      '123456789.000000789'.d,
+      '-123456789.000000789'.d,
       precision: 8,
       roundMode: RoundMode.truncate,
       cutInvalidZero: true,
@@ -193,21 +205,22 @@ void main() {
       groupCounts: 4,
       shrinkZeroMode: ShrinkZeroMode.subscript,
       showSign: true,
+      signFirst: false,
       prefix: '￥',
       suffix: '元',
     );
     print(result);
-    expect(result, "￥+1_2345_6789.0₆78元");
+    expect(result, "￥-1_2345_6789.0₆78元");
   });
 
   test('test global configuration', () {
     print('=====global configuration=====');
 
-    /// 123456789.000000789 => '￥+1.2345.6789,0₆78元'
+    /// 123456789.000000789 => '￥-1.2345.6789,0₆78元'
     try {
       FlexiFormatter.setGlobalConfig(decimalSeparator: ',', groupSeparator: '.', groupCounts: 4);
       var result = formatNumber(
-        '123456789.000000789'.d,
+        '-123456789.000000789'.d,
         precision: 8,
         roundMode: RoundMode.truncate,
         cutInvalidZero: true,
@@ -218,18 +231,19 @@ void main() {
         suffix: '元',
       );
       print(result);
-      expect(result, "￥+1.2345.6789,0₆78元");
+      expect(result, "￥-1.2345.6789,0₆78元");
 
       FlexiFormatter.setGlobalConfig(decimalSeparator: ',', groupSeparator: '.', groupCounts: 3);
       result = formatPrice(
         '123456789.000000789'.d,
         precision: 8,
         showSign: true,
+        signFirst: true,
         prefix: '￥',
         suffix: '元',
       );
       print(result);
-      expect(result, "￥+123.456.789,00000078元");
+      expect(result, "+￥123.456.789,00000078元");
     } finally {
       FlexiFormatter.restoreGlobalConfig();
     }

@@ -22,7 +22,8 @@ part 'extension.dart';
 String formatNumber(
   Decimal? val, {
   int? precision, // 精度, 如果为null, 则使用原始数据的精度
-  bool showSign = false, // 是否展示符号位+
+  bool showSign = false, // 是否展示符号位+|-
+  bool signFirst = false, // 符号位+|-在[prefix]前面
   RoundMode? roundMode,
   bool cutInvalidZero = false, // 删除尾部零
   bool enableCompact = false, // 是否启用精简转换器转换大数展示, 优先于千分位展示
@@ -50,7 +51,15 @@ String formatNumber(
 
   precision ??= val.scale;
 
-  if (showSign && val >= Decimal.zero) prefix += '+';
+  if (showSign) {
+    if (signFirst) {
+      final sign = val.sign;
+      val = val.abs();
+      prefix = '$sign$prefix';
+    } else if (val > Decimal.zero) {
+      prefix += '+';
+    }
+  }
 
   String ret;
   if (enableCompact) {
@@ -99,11 +108,12 @@ String formatPercentage(
   bool expandHundred = true,
   int? precision,
   bool showSign = false,
+  bool signFirst = true, // 符号位+|-在[prefix]前面
   RoundMode roundMode = RoundMode.truncate,
   bool cutInvalidZero = false,
   bool enableGrouping = true,
   ExplicitDirection? direction,
-  bool? percentSignFirst,
+  bool? percentSignFirst, // 百分号%(defaultPrecentSign)在数值前面
   String prefix = '',
   String suffix = '',
   String? defIfZero, // 如果为0时的默认展示
@@ -122,6 +132,7 @@ String formatPercentage(
     val == null ? null : (expandHundred ? val * hundred : val),
     precision: precision,
     showSign: showSign,
+    signFirst: signFirst,
     roundMode: roundMode,
     cutInvalidZero: cutInvalidZero,
     enableGrouping: enableGrouping,
@@ -138,6 +149,7 @@ String formatPrice(
   Decimal? val, {
   int? precision,
   bool showSign = false,
+  bool signFirst = false, // 符号位+|-在[prefix]前面
   RoundMode roundMode = RoundMode.truncate,
   bool cutInvalidZero = true,
   bool enableGrouping = true,
@@ -153,6 +165,7 @@ String formatPrice(
     val,
     precision: precision,
     showSign: showSign,
+    signFirst: signFirst,
     roundMode: roundMode,
     cutInvalidZero: cutInvalidZero,
     enableGrouping: enableGrouping,
@@ -171,6 +184,7 @@ String formatAmount(
   Decimal? val, {
   int? precision,
   bool showSign = false,
+  bool signFirst = false, // 符号位+|-在[prefix]前面
   RoundMode? roundMode,
   bool enableCompact = true,
   CompactConverter? compactConverter,
@@ -187,6 +201,7 @@ String formatAmount(
     val,
     precision: precision,
     showSign: showSign,
+    signFirst: signFirst,
     roundMode: roundMode,
     enableCompact: enableCompact,
     compactConverter: compactConverter,

@@ -20,8 +20,14 @@ print(formatNumber(
   shrinkZeroMode: ShrinkZeroMode.curlyBraces,
 ));
 
-/// 0.1 => '10.0%'
+/// 0.1 => '10%'
 print(formatPercentage(0.1.d));
+
+/// 0.1 => '+%10'
+print(formatPercentage(0.1.d, showSign: true, percentSignFirst: true));
+
+/// 0.1 => '%+10'
+print(formatPercentage(0.1.d, showSign: true, signFirst: false, percentSignFirst: true));
 
 /// 1234567890.12345 => '$1,234,567,890.12'
 print(formatPrice(1234567890.12345.d, precision: 2, prefix: '\$'));
