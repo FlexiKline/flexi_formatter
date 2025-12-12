@@ -1,3 +1,10 @@
+## 1.7.3
+- Fix API naming typos (backward compatible).
+- Add `groupSeparator` to `formatNumber` (deprecated: `groupSepartor`, to be removed in v2.0.0).
+- Add `defaultPercentSign` (deprecated: `defaultPrecentSign`, to be removed in v2.0.0).
+- Add `shrinkMode` to `FlexiFormatter.setGlobalConfig` (deprecated: `shrikMode`, to be removed in v2.0.0).
+- Improve `formatAmount` precision handling for compact formatting (when `precision` is omitted, it defaults to the converted value scale).
+
 ## 1.7.2
 - Add the rule of displaying positive and negative signs at the beginning
 

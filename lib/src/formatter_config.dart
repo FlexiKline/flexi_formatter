@@ -110,7 +110,8 @@ abstract final class FlexiFormatter {
     bool percentSignFirst,
     RoundMode? roundMode,
     ExplicitDirection? direction,
-    ShrinkZeroMode? shrikMode,
+    ShrinkZeroMode? shrinkMode,
+    @Deprecated('Use shrinkMode instead. Will be removed in v2.0.0') ShrinkZeroMode? shrikMode,
     String decimalSeparator,
     String groupSeparator,
     int groupCounts,
@@ -130,7 +131,8 @@ final class _$FlexiFormatterConfigurator implements FlexiFormatter {
     Object? percentSignFirst = _placeHolder,
     Object? roundMode = _placeHolder,
     Object? direction = _placeHolder,
-    Object? shrikMode = _placeHolder,
+    Object? shrinkMode = _placeHolder,
+    @Deprecated('Use shrinkMode instead. Will be removed in v2.0.0') Object? shrikMode = _placeHolder,
     Object? decimalSeparator = _placeHolder,
     Object? groupSeparator = _placeHolder,
     Object? groupCounts = _placeHolder,
@@ -152,8 +154,10 @@ final class _$FlexiFormatterConfigurator implements FlexiFormatter {
       FlexiFormatter._globalExplicitDirection = direction as ExplicitDirection?;
     }
 
-    if (shrikMode != _placeHolder && (shrikMode == null || shrikMode is ShrinkZeroMode)) {
-      FlexiFormatter._globalShrinkZeroMode = shrikMode as ShrinkZeroMode?;
+    // Priority: shrinkMode (new) > shrikMode (deprecated)
+    final effectiveShrinkMode = shrinkMode != _placeHolder ? shrinkMode : shrikMode;
+    if (effectiveShrinkMode != _placeHolder && (effectiveShrinkMode == null || effectiveShrinkMode is ShrinkZeroMode)) {
+      FlexiFormatter._globalShrinkZeroMode = effectiveShrinkMode as ShrinkZeroMode?;
     }
 
     if (shrinkZeroConverter != _placeHolder &&
@@ -161,9 +165,7 @@ final class _$FlexiFormatterConfigurator implements FlexiFormatter {
       FlexiFormatter._globalShrinkZeroConverter = shrinkZeroConverter as ShrinkZeroConverter?;
     }
 
-    if (decimalSeparator != _placeHolder &&
-        decimalSeparator is String &&
-        decimalSeparator.isNotEmpty) {
+    if (decimalSeparator != _placeHolder && decimalSeparator is String && decimalSeparator.isNotEmpty) {
       FlexiFormatter._globalDecimalSeparator = decimalSeparator;
     }
 

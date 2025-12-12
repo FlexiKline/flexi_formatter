@@ -29,7 +29,8 @@ String formatNumber(
   bool enableCompact = false, // 是否启用精简转换器转换大数展示, 优先于千分位展示
   CompactConverter? compactConverter, // 自定义整数部分的精简转换器
   bool enableGrouping = false, // 是否启用分组, 主要是针对千分位展示
-  String? groupSepartor, // 定制分组分隔符, 默认','
+  String? groupSeparator, // 定制分组分隔符, 默认','
+  @Deprecated('Use groupSeparator instead. Will be removed in v2.0.0') String? groupSepartor, // 已弃用: 请使用 groupSeparator
   int? groupCounts, // 定制分组数量, 默认3
   ShrinkZeroMode? shrinkZeroMode, // 小数部分多零情况下, 进行收缩展示模式
   ShrinkZeroConverter? shrinkZeroConverter, // 自定义多零收缩转换器
@@ -48,8 +49,6 @@ String formatNumber(
   if (val == Decimal.zero && defIfZero != null) {
     return '$prefix$defIfZero$suffix'.applyExplicitBidiFormatting(direction);
   }
-
-  precision ??= val.scale;
 
   if (showSign) {
     if (signFirst) {
@@ -75,12 +74,14 @@ String formatNumber(
     );
     suffix = unit + suffix;
   } else if (enableGrouping) {
+    // 优先使用新参数 groupSeparator，回退到旧参数 groupSepartor
+    final effectiveGroupSeparator = groupSeparator ?? groupSepartor;
     var (integerPart, decimalPart) = val.group(
-      precision,
+      precision ?? val.scale,
       roundMode: roundMode,
       isClean: cutInvalidZero,
       groupCounts: groupCounts,
-      groupSeparator: groupSepartor,
+      groupSeparator: effectiveGroupSeparator,
     );
     decimalPart = decimalPart.shrinkZero(
       shrinkMode: shrinkZeroMode,
@@ -89,7 +90,7 @@ String formatNumber(
     ret = integerPart + decimalPart;
   } else {
     ret = val.formatAsString(
-      precision,
+      precision ?? val.scale,
       roundMode: roundMode,
       isClean: cutInvalidZero,
     );
@@ -113,7 +114,7 @@ String formatPercentage(
   bool cutInvalidZero = false,
   bool enableGrouping = true,
   ExplicitDirection? direction,
-  bool? percentSignFirst, // 百分号%(defaultPrecentSign)在数值前面
+  bool? percentSignFirst, // 百分号%(defaultPercentSign)在数值前面
   String prefix = '',
   String suffix = '',
   String? defIfZero, // 如果为0时的默认展示
@@ -121,11 +122,11 @@ String formatPercentage(
 }) {
   percentSignFirst ??= FlexiFormatter.percentSignFirst;
   if (percentSignFirst) {
-    prefix = prefix.contains(defaultPrecentSign) ? prefix : '$prefix$defaultPrecentSign';
-    suffix = suffix.isNotEmpty ? suffix.replaceAll(defaultPrecentSign, '') : '';
+    prefix = prefix.contains(defaultPercentSign) ? prefix : '$prefix$defaultPercentSign';
+    suffix = suffix.isNotEmpty ? suffix.replaceAll(defaultPercentSign, '') : '';
   } else {
-    prefix = prefix.isNotEmpty ? prefix.replaceAll(defaultPrecentSign, '') : '';
-    suffix = suffix.contains(defaultPrecentSign) ? suffix : '$defaultPrecentSign$suffix';
+    prefix = prefix.isNotEmpty ? prefix.replaceAll(defaultPercentSign, '') : '';
+    suffix = suffix.contains(defaultPercentSign) ? suffix : '$defaultPercentSign$suffix';
   }
 
   return formatNumber(

@@ -64,7 +64,7 @@ void printFormatNumber() {
     roundMode: RoundMode.truncate,
     cutInvalidZero: true,
     enableGrouping: true,
-    groupSepartor: '_',
+    groupSeparator: '_',
     groupCounts: 4,
     shrinkZeroMode: ShrinkZeroMode.subscript,
     showSign: true,

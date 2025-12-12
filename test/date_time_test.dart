@@ -65,47 +65,47 @@ void main() {
     final other = DateTime(2025, 4, 1, 12, 30, 45);
     test('year 方法测试', () {
       final result = testDate.diff(other, unit: TimeUnit.year);
-      print("year: $result");
+      print('year: $result');
       expect(result, isA<num>());
     });
     test('month 方法测试', () {
       final result = testDate.diff(other, unit: TimeUnit.month);
-      print("month: $result");
+      print('month: $result');
       expect(result, isA<num>());
     });
     test('week 方法测试', () {
       final result = testDate.diff(other, unit: TimeUnit.week);
-      print("week: $result");
+      print('week: $result');
       expect(result, isA<num>());
     });
     test('day 方法测试', () {
       final result = testDate.diff(other, unit: TimeUnit.day);
-      print("day: $result");
+      print('day: $result');
       expect(result, isA<num>());
     });
     test('hour 方法测试', () {
       final result = testDate.diff(other, unit: TimeUnit.hour);
-      print("hour: $result");
+      print('hour: $result');
       expect(result, isA<num>());
     });
     test('minute 方法测试', () {
       final result = testDate.diff(other, unit: TimeUnit.minute);
-      print("minute: $result");
+      print('minute: $result');
       expect(result, isA<num>());
     });
     test('second 方法测试', () {
       final result = testDate.diff(other, unit: TimeUnit.second);
-      print("second: $result");
+      print('second: $result');
       expect(result, isA<num>());
     });
     test('millisecond 方法测试', () {
       final result = testDate.diff(other, unit: TimeUnit.millisecond);
-      print("millisecond: $result");
+      print('millisecond: $result');
       expect(result, isA<num>());
     });
     test('microsecond 方法测试', () {
       final result = testDate.diff(other, unit: TimeUnit.microsecond);
-      print("microsecond: $result");
+      print('microsecond: $result');
       expect(result, isA<num>());
     });
   });

@@ -567,8 +567,7 @@ extension FlexiDateTimeExtension on DateTime {
     final startOfFirstMicroseconds = startOf(unit).microsecondsSinceEpoch;
     final endOfFirstMicroseconds = endOf(unit).microsecondsSinceEpoch;
 
-    return startOfFirstMicroseconds <= secondMicroseconds &&
-        secondMicroseconds <= endOfFirstMicroseconds;
+    return startOfFirstMicroseconds <= secondMicroseconds && secondMicroseconds <= endOfFirstMicroseconds;
   }
 
   /// Checks if the DateTime is in the same year as the specified DateTime.

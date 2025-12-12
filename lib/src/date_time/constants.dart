@@ -22,6 +22,7 @@ const yyyyMM = 'yyyy-MM';
 const MMdd = 'MM-dd';
 const MMddHHmm = 'MM-dd HH:mm';
 const MMddHHmmss = 'MM-dd HH:mm:ss';
+const yyyyMMDDHHmm = 'yyyy-MM-dd HH:mm';
 const yyyyMMDDHHmmss = 'yyyy-MM-dd HH:mm:ss';
 const yyyyMMDDHHmmssSSS = 'yyyy-MM-dd HH:mm:ss.SSS';
 

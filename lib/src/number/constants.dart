@@ -15,7 +15,11 @@
 part of 'formatter.dart';
 
 /// 默认百分比符号
-const defaultPrecentSign = '%';
+const defaultPercentSign = '%';
+
+/// @deprecated Use [defaultPercentSign] instead. Will be removed in v2.0.0.
+@Deprecated('Use defaultPercentSign instead. Will be removed in v2.0.0')
+const defaultPrecentSign = defaultPercentSign;
 
 /// 默认小数点分隔符
 const defaultDecimalSeparator = '.';

@@ -116,35 +116,35 @@ void main() {
 
     var result = formatPercentage(0.1.d, precision: 2, cutInvalidZero: false);
     print(result);
-    expect(result, "10.00%");
+    expect(result, '10.00%');
 
     result = formatPercentage(0.1.d, cutInvalidZero: true);
     print(result);
-    expect(result, "10%");
+    expect(result, '10%');
 
     result = formatPercentage(0.98765.d, precision: 2, cutInvalidZero: false);
     print(result);
-    expect(result, "98.76%");
+    expect(result, '98.76%');
 
     result = formatPercentage(0.98765.d, cutInvalidZero: true);
     print(result);
-    expect(result, "98.765%");
+    expect(result, '98.765%');
 
     result = formatPercentage(10.56.d, cutInvalidZero: true);
     print(result);
-    expect(result, "1,056%");
+    expect(result, '1,056%');
 
     result = formatPercentage(0.56.d, showSign: true);
     print(result);
-    expect(result, "+56%");
+    expect(result, '+56%');
 
     result = formatPercentage(0.56.d, showSign: true, percentSignFirst: true);
     print(result);
-    expect(result, "+%56");
+    expect(result, '+%56');
 
     result = formatPercentage(0.56.d, showSign: true, signFirst: false, percentSignFirst: true);
     print(result);
-    expect(result, "%+56");
+    expect(result, '%+56');
   });
 
   test('test formatPrice', () {
@@ -152,15 +152,15 @@ void main() {
 
     var result = formatPrice(0.1.d, precision: 2, cutInvalidZero: false, prefix: '\$');
     print(result);
-    expect(result, "\$0.10");
+    expect(result, '\$0.10');
 
     result = formatPrice(0.1.d, precision: 2, cutInvalidZero: true, prefix: '\$');
     print(result);
-    expect(result, "\$0.1");
+    expect(result, '\$0.1');
 
     result = formatPrice(123456.789.d, precision: 2, prefix: '\$');
     print(result);
-    expect(result, "\$123,456.78");
+    expect(result, '\$123,456.78');
 
     result = formatPrice(
       123456.000000789.d,
@@ -169,7 +169,7 @@ void main() {
       shrinkZeroMode: ShrinkZeroMode.curlyBraces,
     );
     print(result);
-    expect(result, "\$123,456.0{6}789");
+    expect(result, '\$123,456.0{6}789');
   });
 
   test('test formatAmount', () {
@@ -177,11 +177,11 @@ void main() {
 
     var result = formatAmount(12345.1.d, precision: 2);
     print(result);
-    expect(result, "12.35K");
+    expect(result, '12.35K');
 
     result = formatAmount(123456789.d, precision: 3);
     print(result);
-    expect(result, "123.457M");
+    expect(result, '123.457M');
 
     result = formatAmount(
       123456789.d,
@@ -189,13 +189,13 @@ void main() {
       compactConverter: simplifiedChineseCompactConverter,
     );
     print(result);
-    expect(result, "1.235亿");
+    expect(result, '1.235亿');
   });
 
   test('test formatNumber', () {
     print('=====formatNumber=====');
 
-    var result = formatNumber(
+    final result = formatNumber(
       '-123456789.000000789'.d,
       precision: 8,
       roundMode: RoundMode.truncate,
@@ -210,7 +210,7 @@ void main() {
       suffix: '元',
     );
     print(result);
-    expect(result, "￥-1_2345_6789.0₆78元");
+    expect(result, '￥-1_2345_6789.0₆78元');
   });
 
   test('test global configuration', () {
@@ -231,7 +231,7 @@ void main() {
         suffix: '元',
       );
       print(result);
-      expect(result, "￥-1.2345.6789,0₆78元");
+      expect(result, '￥-1.2345.6789,0₆78元');
 
       FlexiFormatter.setGlobalConfig(decimalSeparator: ',', groupSeparator: '.', groupCounts: 3);
       result = formatPrice(
@@ -243,7 +243,7 @@ void main() {
         suffix: '元',
       );
       print(result);
-      expect(result, "+￥123.456.789,00000078元");
+      expect(result, '+￥123.456.789,00000078元');
     } finally {
       FlexiFormatter.restoreGlobalConfig();
     }
@@ -253,7 +253,7 @@ void main() {
     print('=====custom shrin zero converter=====');
 
     /// 123456789.000000789 => '￥+123,456,789.0<₆>78元'
-    var result = formatNumber(
+    final result = formatNumber(
       '123456789.000000789'.d,
       precision: 8,
       roundMode: RoundMode.truncate,
@@ -268,7 +268,7 @@ void main() {
       suffix: '元',
     );
     print(result);
-    expect(result, "￥+123,456,789.0<₆>78元");
+    expect(result, '￥+123,456,789.0<₆>78元');
   });
 
   test('test format exceeding the exponent limit value', () {
@@ -305,7 +305,7 @@ void main() {
       );
 
       final dividend = Decimal.fromInt(10).pow(35).toDecimal();
-      var value = (23237.84.d / dividend).toDecimal(
+      final value = (23237.84.d / dividend).toDecimal(
         scaleOnInfinitePrecision: FlexiFormatter.scaleOnInfinitePrecision,
       );
       var result = formatNumber(
@@ -338,7 +338,7 @@ void main() {
       cutInvalidZero: true,
     );
     print(result);
-    expect(result, "10%");
+    expect(result, '10%');
 
     result = formatPercentage(
       0.1.d,
@@ -347,7 +347,7 @@ void main() {
       percentSignFirst: true,
     );
     print(result);
-    expect(result, "%10");
+    expect(result, '%10');
 
     try {
       FlexiFormatter.setGlobalConfig(percentSignFirst: true);
@@ -359,7 +359,7 @@ void main() {
         suffix: '%',
       );
       print(result);
-      expect(result, "Current: %10");
+      expect(result, 'Current: %10');
     } finally {
       FlexiFormatter.restoreGlobalConfig();
     }
@@ -372,7 +372,7 @@ void main() {
       suffix: ' count',
     );
     print(result);
-    expect(result, "Current: 10% count");
+    expect(result, 'Current: 10% count');
 
     result = formatPercentage(
       0.1.d,
@@ -383,6 +383,140 @@ void main() {
       suffix: '% count',
     );
     print(result);
-    expect(result, "Current: %10 count");
+    expect(result, 'Current: %10 count');
+  });
+
+  test('test customCompact', () {
+    print('=====customCompact=====');
+    (Decimal, String) customCompact(Decimal value) {
+      final val = value.abs();
+      if (val >= trillion) {
+        return (
+          (value / trillion).toDecimal().floor(scale: 2),
+          'T',
+        );
+      } else if (val >= billion) {
+        return (
+          (value / billion).toDecimal().floor(scale: 2),
+          'B',
+        );
+      } else if (val >= million) {
+        return (
+          (value / million).toDecimal().floor(scale: 2),
+          'M',
+        );
+      } else if (val >= tenThousand) {
+        return (
+          (value / thousand).toDecimal().floor(scale: 2),
+          'K',
+        );
+      } else {
+        return (value, '');
+      }
+    }
+
+    var result = formatAmount(
+      123456.d,
+      precision: 2,
+      compactConverter: customCompact,
+    );
+    print(result);
+    expect(result, '123.45K');
+
+    result = formatAmount(
+      1234.2.d,
+      precision: 2,
+      cutInvalidZero: false,
+      compactConverter: customCompact,
+    );
+    print(result);
+    expect(result, '1234.20');
+
+    result = formatAmount(
+      123.23.d,
+      precision: 2,
+      compactConverter: customCompact,
+    );
+    print(result);
+    expect(result, '123.23');
+
+    result = formatAmount(
+      123.234.d,
+      compactConverter: customCompact,
+    );
+    print(result);
+    expect(result, '123.234');
+  });
+
+  test('test formatAmount for extreme values (极大值)', () {
+    // 极大值测试
+    var result = formatAmount(
+      '999999999999999999999999999999'.d,
+    );
+    print(result);
+    expect(result, '999999999999999999.999999999999T');
+
+    // 正常大数分界, 万亿
+    result = formatAmount(
+      '1000000000000'.d,
+    );
+    print(result);
+    expect(result, '1T');
+
+    // 过界最小T
+    result = formatAmount(
+      '1000000000001'.d,
+      precision: 2,
+    );
+    print(result);
+    // precision=2，但 cutInvalidZero=true（默认），所以 '1.00T' 会被清理为 '1T'
+    expect(result, '1T');
+
+    // T单位边界再下, B边界
+    result = formatAmount(
+      '999999999999'.d,
+      roundMode: RoundMode.round,
+      precision: 3,
+    );
+    print(result);
+    expect(result, '1000B');
+
+    // B单位下界
+    result = formatAmount(
+      '1000000000'.d,
+    );
+    print(result);
+    expect(result, '1B');
+  });
+
+  test('test formatAmount for extreme values (极小值)', () {
+    // 极小正数
+    var result = formatAmount(
+      '0.00000000000000000001'.d,
+    );
+    print(result);
+    expect(result, '1.e-20');
+
+    // 精度测试，避免四舍五入出现极值问题
+    result = formatAmount(
+      '0.0000001'.d,
+      precision: 10,
+    );
+    print(result);
+    expect(result, '0.0000001');
+
+    // 负极小值
+    result = formatAmount(
+      '-0.00000000000000001'.d,
+    );
+    print(result);
+    expect(result, '-1.e-17');
+
+    // 0值
+    result = formatAmount(
+      Decimal.zero,
+    );
+    print(result);
+    expect(result, '0');
   });
 }

@@ -1,13 +1,13 @@
 name: flexi_formatter_example
-version: 0.0.2
+version: 0.1.0
 description: Example app for the flexi_formatter package.
 homepage: https://github.com/FlexiKline/flexi_formatter
 publish_to: none
 
 environment:
-  sdk: ">=3.3.0 <4.0.0"
+  sdk: ">=3.5.0 <4.0.0"
 
 dependencies:
   flexi_formatter:
     path: ../
-  intl: ^0.19.0
+  intl: ^0.20.2

@@ -42,11 +42,11 @@ extension FlexiDateTimeFormatterExt on DateTime {
     other ??= DateTime.now();
     final diff = difference(other);
     var microseconds = diff.inMicroseconds;
-    var sign = "";
-    var negative = microseconds < 0;
+    var sign = '';
+    final negative = microseconds < 0;
     if (negative) {
       microseconds = -microseconds;
-      if (showSign) sign = "-";
+      if (showSign) sign = '-';
     }
 
     if (microseconds >= Duration.microsecondsPerDay) {

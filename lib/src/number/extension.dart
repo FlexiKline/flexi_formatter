@@ -70,7 +70,7 @@ extension FlexiNumberFormatterIntExt on int {
     if (isNaN) return '';
     final buffer = StringBuffer(sign < 0 ? subscriptNegative : '');
     final zeroCodeUnit = '0'.codeUnitAt(0);
-    for (int unit in abs().toString().codeUnits) {
+    for (final int unit in abs().toString().codeUnits) {
       buffer.write(subscriptNumerals[unit - zeroCodeUnit]);
     }
     return buffer.toString();
@@ -81,7 +81,7 @@ extension FlexiNumberFormatterIntExt on int {
     if (isNaN) return '';
     final buffer = StringBuffer(sign < 0 ? superscriptNegative : '');
     final zeroCodeUnit = '0'.codeUnitAt(0);
-    for (int unit in abs().toString().codeUnits) {
+    for (final int unit in abs().toString().codeUnits) {
       buffer.write(superscriptNumerals[unit - zeroCodeUnit]);
     }
     return buffer.toString();
@@ -142,8 +142,7 @@ extension FlexiNumberFormatterDecimalExt on Decimal {
     if (roundMode != null) value = rounding(roundMode, scale: precision);
     String result;
     if (value != Decimal.zero &&
-        (value.abs() <= FlexiFormatter.exponentMinDecimal ||
-            value.abs() > FlexiFormatter.exponentMaxDecimal)) {
+        (value.abs() <= FlexiFormatter.exponentMinDecimal || value.abs() > FlexiFormatter.exponentMaxDecimal)) {
       result = value.toStringAsExponential(precision);
     } else {
       result = value.toStringAsFixed(precision);
@@ -159,17 +158,19 @@ extension FlexiNumberFormatterDecimalExt on Decimal {
 extension on Decimal {
   /// Format this number with compact converter.
   (String, String) compact({
-    int precision = 2,
+    int? precision,
     bool isClean = true,
     RoundMode? roundMode,
     CompactConverter? converter,
   }) {
     converter ??= FlexiFormatter.globalCompactConverter;
-    var (value, unit) = converter(this);
-    roundMode ??= FlexiFormatter.globalRoundMode;
-    if (roundMode != null) value = value.rounding(roundMode, scale: precision);
-    String result = value.toStringAsFixed(precision);
-    if (isClean) result = result.cleaned;
+    final (value, unit) = converter(this);
+    precision ??= value.scale;
+    final result = value.formatAsString(
+      precision,
+      roundMode: roundMode,
+      isClean: isClean,
+    );
     return (result, unit);
   }
 
@@ -283,10 +284,9 @@ extension on Decimal {
 extension on String {
   String get cleaned {
     return switch (this) {
-      String value when value.endsWith(defaultDecimalSeparator) =>
-        value.substring(0, value.length - 1),
-      String value when value.contains('e') => value.replaceAll(RegExp(r'(?<=\.\d*?)0+(?!\d)'), ''),
-      String value when value.endsWith('0') && contains(defaultDecimalSeparator) =>
+      final String value when value.endsWith(defaultDecimalSeparator) => value.substring(0, value.length - 1),
+      final String value when value.contains('e') => value.replaceAll(RegExp(r'(?<=\.\d*?)0+(?!\d)'), ''),
+      final String value when value.endsWith('0') && contains(defaultDecimalSeparator) =>
         value.substring(0, value.length - 1).cleaned,
       _ => this,
     };
