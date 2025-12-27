@@ -89,7 +89,7 @@ void main() {
     });
   });
 
-  group('DateTimeFormatterExt formatByUnit ', () {
+  group('DateTimeFormatterExt formatByUnit', () {
     setUp(() {
       FlexiFormatter.setCurrentLocale('zh-CN');
     });
@@ -388,7 +388,7 @@ void main() {
     });
   });
 
-  group('DateTimeFormatterExt format(patten?, locale?) Tests', () {
+  group('DateTimeFormatterExt format(pattern?, locale?) Tests', () {
     test('combineFormat 方法测试', () {
       final result = testDate.combineFormat(
         DateFormat.YEAR_ABBR_QUARTER,
@@ -412,22 +412,30 @@ void main() {
   });
 
   group('DateTimeFormat useSystem', () {
+    setUp(() {
+      FlexiFormatter.setGlobalConfig(useSystemLocale: false);
+    });
+
+    tearDown(() {
+      FlexiFormatter.restoreGlobalConfig();
+    });
+
     test('useSystem(false) 方法测试', () {
       FlexiFormatter.setCurrentLocale('zh-CN');
-      var result = testDate.format(yyyyMMDDHHmmss, useSystemLocale: false);
+      var result = testDate.format(yyyyMMDDHHmmss);
       print('useSystem(false): $result');
       FlexiFormatter.setCurrentLocale('ar-SA');
-      result = testDate.format(yyyyMMDDHHmmss, useSystemLocale: false);
+      result = testDate.format(yyyyMMDDHHmmss);
       print('useSystem(false): $result');
     });
 
     test('useSystem(true) 方法测试', () {
       FlexiFormatter.setCurrentLocale('zh-CN');
       var result = testDate.format(yyyyMMDDHHmmss, useSystemLocale: true);
-      print('useSystem(false): $result');
+      print('useSystem(true): $result');
       FlexiFormatter.setCurrentLocale('ar-SA');
       result = testDate.format(yyyyMMDDHHmmss, useSystemLocale: true);
-      print('useSystem(false): $result');
+      print('useSystem(true): $result');
     });
   });
 }

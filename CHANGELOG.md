@@ -1,3 +1,11 @@
+## 2.0.0
+- **BREAKING CHANGE**: Remove deprecated APIs:
+  - Remove `groupSepartor` parameter from `formatNumber` (use `groupSeparator` instead).
+  - Remove `defaultPrecentSign` constant (use `defaultPercentSign` instead).
+  - Remove `shrikMode` parameter from `FlexiFormatter.setGlobalConfig` (use `shrinkMode` instead).
+- Require Dart SDK `>=3.5.0 <4.0.0`.
+- Add global configuration `useSystemLocale` for date formatting (default: `false`).
+
 ## 1.7.3
 - Fix API naming typos (backward compatible).
 - Add `groupSeparator` to `formatNumber` (deprecated: `groupSepartor`, to be removed in v2.0.0).

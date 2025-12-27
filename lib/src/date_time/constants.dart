@@ -16,61 +16,83 @@
 
 part of 'formatter.dart';
 
-/// 使用-分隔符的日期格式化
+/// Date format with '-' separator: yyyy-MM-dd
+/// 使用-分隔符的日期格式化: yyyy-MM-dd
 const yyyyMMdd = 'yyyy-MM-dd';
+
+/// Date format with '-' separator: yyyy-MM
+/// 使用-分隔符的日期格式化: yyyy-MM
 const yyyyMM = 'yyyy-MM';
+
+/// Date format with '-' separator: MM-dd
+/// 使用-分隔符的日期格式化: MM-dd
 const MMdd = 'MM-dd';
+
+/// Date and time format with '-' separator: MM-dd HH:mm
+/// 使用-分隔符的日期时间格式化: MM-dd HH:mm
 const MMddHHmm = 'MM-dd HH:mm';
+
+/// Date and time format with '-' separator: MM-dd HH:mm:ss
+/// 使用-分隔符的日期时间格式化: MM-dd HH:mm:ss
 const MMddHHmmss = 'MM-dd HH:mm:ss';
+
+/// Date and time format with '-' separator: yyyy-MM-dd HH:mm
+/// 使用-分隔符的日期时间格式化: yyyy-MM-dd HH:mm
 const yyyyMMDDHHmm = 'yyyy-MM-dd HH:mm';
+
+/// Date and time format with '-' separator: yyyy-MM-dd HH:mm:ss
+/// 使用-分隔符的日期时间格式化: yyyy-MM-dd HH:mm:ss
 const yyyyMMDDHHmmss = 'yyyy-MM-dd HH:mm:ss';
+
+/// Date and time format with '-' separator: yyyy-MM-dd HH:mm:ss.SSS
+/// 使用-分隔符的日期时间格式化: yyyy-MM-dd HH:mm:ss.SSS
 const yyyyMMDDHHmmssSSS = 'yyyy-MM-dd HH:mm:ss.SSS';
 
+/// Time format: HH:mm
+/// 时间格式: HH:mm
 const HHmm = 'HH:mm';
+
+/// Time format: HH:mm:ss
+/// 时间格式: HH:mm:ss
 const HHmmss = 'HH:mm:ss';
+
+/// Time format: HH:mm:ss.SSS
+/// 时间格式: HH:mm:ss.SSS
 const HHmmssSSS = 'HH:mm:ss.SSS';
+
+/// Time format: mm:ss.SSS
+/// 时间格式: mm:ss.SSS
 const mmssSSS = 'mm:ss.SSS';
 
+/// Time unit enumeration
+/// 时间单位枚举
 enum TimeUnit {
-  /// 年
   year(Duration.microsecondsPerDay * 365),
-
-  /// 月
   month(Duration.microsecondsPerDay * 30),
-
-  /// 周
   week(Duration.microsecondsPerDay * 7),
-
-  /// 天
   day(Duration.microsecondsPerDay),
-
-  /// 小时
   hour(Duration.microsecondsPerHour),
-
-  /// 分钟
   minute(Duration.microsecondsPerMinute),
-
-  /// 秒
   second(Duration.microsecondsPerSecond),
-
-  /// 毫秒
   millisecond(Duration.microsecondsPerMillisecond),
-
-  /// 微秒
   microsecond(1);
 
   final int microseconds;
   const TimeUnit(this.microseconds);
 }
 
-/// An enumeration representing the start day of the week.
+/// An enumeration representing the start day of the week
+/// 表示一周开始日的枚举
 enum StartOfWeek {
-  /// Represents Saturday as the start of the week.
+  /// Represents Saturday as the start of the week
+  /// 表示周六为一周的开始
   saturday,
 
-  /// Represents Sunday as the start of the week.
+  /// Represents Sunday as the start of the week
+  /// 表示周日为一周的开始
   sunday,
 
-  /// Represents Monday as the start of the week.
+  /// Represents Monday as the start of the week
+  /// 表示周一为一周的开始
   monday,
 }

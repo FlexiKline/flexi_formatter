@@ -15,10 +15,16 @@
 part of 'formatter.dart';
 
 extension FlexiNumberFormatStringExt on String {
+  /// Convert string to Decimal, returns null if parsing fails
+  /// 将字符串转换为Decimal, 如果解析失败返回null
   Decimal? get d => Decimal.tryParse(this);
 
+  /// Left-to-right text direction, same as lri
+  /// 左到右文本方向(Left-to-Right), 等同于lri
   String get ltr => lri;
 
+  /// Right-to-left text direction, same as rli
+  /// 右到左文本方向(Right-to-Left), 等同于rli
   String get rtl => rli;
 
   /// https://unicode.org/reports/tr9/
@@ -55,17 +61,24 @@ extension FlexiNumberFormatStringExt on String {
 }
 
 extension FlexiNumberFormatterBigIntExt on BigInt {
+  /// Convert BigInt to Decimal
+  /// 将BigInt转换为Decimal
   Decimal get d => Decimal.fromBigInt(this);
 }
 
 extension FlexiNumberFormatterDoubleExt on double {
+  /// Convert double to Decimal
+  /// 将double转换为Decimal
   Decimal get d => Decimal.parse(toString());
 }
 
 extension FlexiNumberFormatterIntExt on int {
+  /// Convert int to Decimal
+  /// 将int转换为Decimal
   Decimal get d => Decimal.fromInt(this);
 
-  /// 将数字转换为下角标形式字符展示.
+  /// Convert number to subscript numeral string, e.g. 4 => "₄"
+  /// 将数字转换为下角标形式字符展示, 例如: 4 => "₄"
   String get subscriptNumeral {
     if (isNaN) return '';
     final buffer = StringBuffer(sign < 0 ? subscriptNegative : '');
@@ -76,7 +89,8 @@ extension FlexiNumberFormatterIntExt on int {
     return buffer.toString();
   }
 
-  /// 将数字转换为上角标形式字符展示.
+  /// Convert number to superscript numeral string, e.g. 4 => "⁴"
+  /// 将数字转换为上角标形式字符展示, 例如: 4 => "⁴"
   String get superscriptNumeral {
     if (isNaN) return '';
     final buffer = StringBuffer(sign < 0 ? superscriptNegative : '');
@@ -89,23 +103,31 @@ extension FlexiNumberFormatterIntExt on int {
 }
 
 extension FlexiNumberFormatterDecimalExt on Decimal {
-  String get sign => switch (signum) {
+  /// Get sign character: '+' for positive, '-' for negative, '' for zero
+  /// 获取符号字符: 正数返回'+', 负数返回'-', 零返回空字符串
+  String get signChar => switch (sign) {
         -1 => '-',
         1 => '+',
         _ => '',
       };
 
+  /// Get half of current value
+  /// 获取当前值的一半
   Decimal get half => (this / two).toDecimal(
         scaleOnInfinitePrecision: FlexiFormatter.scaleOnInfinitePrecision,
       );
 
-  Decimal divNum(num num) {
-    assert(num != 0, 'divisor cannot be zero');
-    if (num is int) return div(Decimal.fromInt(num));
-    if (num is double) return div(num.d);
-    throw Exception('$num cannot convert to decimal');
+  /// Divide by num type value
+  /// 使用num类型值进行除法运算
+  Decimal divNum(num value) {
+    assert(value != 0, 'divisor cannot be zero');
+    if (value is int) return div(Decimal.fromInt(value));
+    if (value is double) return div(value.d);
+    throw Exception('$value cannot convert to decimal');
   }
 
+  /// Divide by Decimal with global scale configuration
+  /// 使用全局配置的无限精度除法精度执行Decimal除法运算
   Decimal div(Decimal other) {
     assert(other != Decimal.zero, 'divisor cannot be zero');
     return (this / other).toDecimal(
@@ -113,7 +135,8 @@ extension FlexiNumberFormatterDecimalExt on Decimal {
     );
   }
 
-  /// use [RoundMode] to handling Decimal
+  /// Round Decimal using [RoundMode]
+  /// 使用[RoundMode]对Decimal进行舍入处理
   Decimal rounding(RoundMode mode, {int? scale}) {
     scale ??= 0;
     return switch (mode) {
@@ -124,14 +147,18 @@ extension FlexiNumberFormatterDecimalExt on Decimal {
     };
   }
 
-  /// The rational string that correctly represents this number.
+  /// Format Decimal to string representation
+  /// 将Decimal格式化为字符串表示
   ///
-  /// All [Decimal]s in the range `10^-15` (inclusive) to `10^21` (exclusive)
+  /// All [Decimal]s in the range [FlexiFormatter.exponentMinDecimal] (inclusive) to [FlexiFormatter.exponentMaxDecimal] (exclusive)
   /// are converted to their decimal representation with at least one digit
-  /// afer the decimal point. For all other decimal, this method returns an
+  /// after the decimal point. For all other decimal, this method returns an
   /// exponential representation (see [toStringAsExponential]).
+  /// 在范围 [FlexiFormatter.exponentMinDecimal] (包含) 到 [FlexiFormatter.exponentMaxDecimal] (不包含) 内的所有[Decimal]值将被转换为至少包含一位小数点的十进制表示。
+  /// 对于其他所有Decimal值，此方法返回指数表示形式(参见 [toStringAsExponential])。
   ///
   /// [precision] stands for fractionDigits
+  /// [precision] 表示小数位数
   String formatAsString(
     int precision, {
     RoundMode? roundMode,
@@ -151,12 +178,14 @@ extension FlexiNumberFormatterDecimalExt on Decimal {
     return result;
   }
 
-  /// Parsing [Decimal] to percentage [String].
+  /// Convert [Decimal] to percentage [String]
+  /// 将[Decimal]转换为百分比[String]格式, 例如: 0.1 => "10%"
   String get percentage => '${(this * hundred).toStringAsFixed(2).cleaned}%';
 }
 
 extension on Decimal {
-  /// Format this number with compact converter.
+  /// Format number with compact converter, returns (formatted value string, unit string)
+  /// 使用精简转换器格式化数字, 返回(格式化后的数值字符串, 单位字符串)
   (String, String) compact({
     int? precision,
     bool isClean = true,
@@ -174,7 +203,8 @@ extension on Decimal {
     return (result, unit);
   }
 
-  /// Format the integer part of Decimal with grouping configuration
+  /// Format integer part of Decimal with grouping configuration, returns (formatted integer part, decimal part)
+  /// 使用分组配置格式化Decimal的整数部分, 返回(格式化后的整数部分, 小数部分)
   (String, String) group(
     int precision, {
     RoundMode? roundMode,
@@ -189,6 +219,8 @@ extension on Decimal {
     ).grouping(groupSeparator, groupCounts);
   }
 
+  /// Convert Decimal to thousand compact format, returns (converted value, unit), e.g. 1000000 => (1, "M")
+  /// 将Decimal转换为千分位精简格式, 返回(转换后的值, 单位), 例如: 1000000 => (1, "M")
   (Decimal, String) get toThousandCompact {
     final val = abs();
     if (val >= trillion) {
@@ -224,6 +256,8 @@ extension on Decimal {
     }
   }
 
+  /// Convert Decimal to simplified Chinese compact format, returns (converted value, unit), e.g. 100000000 => (1, "亿")
+  /// 将Decimal转换为简体中文精简格式, 返回(转换后的值, 单位), 例如: 100000000 => (1, "亿")
   (Decimal, String) get toSimplifiedChineseCompact {
     final val = abs();
     if (val > trillion) {
@@ -252,6 +286,8 @@ extension on Decimal {
     }
   }
 
+  /// Convert Decimal to traditional Chinese compact format, returns (converted value, unit), e.g. 100000000 => (1, "億")
+  /// 将Decimal转换为繁体中文精简格式, 返回(转换后的值, 单位), 例如: 100000000 => (1, "億")
   (Decimal, String) get toTraditionalChineseCompact {
     final val = abs();
     if (val > trillion) {
@@ -282,6 +318,8 @@ extension on Decimal {
 }
 
 extension on String {
+  /// Clean invalid trailing zeros and decimal point, e.g. "1.00" => "1", "1.0" => "1"
+  /// 清理字符串中无效的尾随零和小数点, 例如: "1.00" => "1", "1.0" => "1"
   String get cleaned {
     return switch (this) {
       final String value when value.endsWith(defaultDecimalSeparator) => value.substring(0, value.length - 1),
@@ -292,6 +330,8 @@ extension on String {
     };
   }
 
+  /// Group string formatting (mainly for thousand separator), returns (formatted integer part, decimal part)
+  /// 对字符串进行分组格式化(主要用于千分位), 返回(格式化后的整数部分, 小数部分)
   (String, String) grouping(String? separator, int? groupCounts) {
     separator ??= FlexiFormatter.globalGroupIntegerSeparator;
     groupCounts ??= FlexiFormatter.globalGroupIntegerCounts;
@@ -314,6 +354,8 @@ extension on String {
     return (formattedInteger, decimalPart);
   }
 
+  /// Shrink multiple consecutive zeros in decimal part, format according to [shrinkMode]
+  /// 收缩小数部分中的多个连续零, 根据[shrinkMode]选择不同的收缩格式
   String shrinkZero({
     ShrinkZeroMode? shrinkMode,
     ShrinkZeroConverter? shrinkConverter,
@@ -355,8 +397,8 @@ extension on String {
     return '${substring(0, dotIndex)}$decimalSeparator$formattedDecimal';
   }
 
-  /// 应用显式双向格式
-  /// 支持(隔离/嵌入/覆盖)
+  /// Apply explicit bidirectional formatting, supports (isolates/embeddings/overrides)
+  /// 应用显式双向格式, 支持(隔离/嵌入/覆盖)
   String applyExplicitBidiFormatting(ExplicitDirection? direction) {
     direction ??= FlexiFormatter.globalExplicitDirection;
     if (direction == null) return this;

@@ -85,7 +85,7 @@ void main() {
     }
   });
 
-  test('test ShrinkZeroMode ', () {
+  test('test ShrinkZeroMode with insufficient zeros', () {
     print('=====ShrinkZeroMode=====');
     var result = formatNumber(
       '88.00'.d,
@@ -97,7 +97,7 @@ void main() {
     expect(result, '88.00');
 
     try {
-      FlexiFormatter.setGlobalConfig(shrikMode: ShrinkZeroMode.curlyBraces);
+      FlexiFormatter.setGlobalConfig(shrinkMode: ShrinkZeroMode.curlyBraces);
       result = formatPercentage(
         '88.00'.d,
         expandHundred: false,
@@ -201,7 +201,7 @@ void main() {
       roundMode: RoundMode.truncate,
       cutInvalidZero: true,
       enableGrouping: true,
-      groupSepartor: '_',
+      groupSeparator: '_',
       groupCounts: 4,
       shrinkZeroMode: ShrinkZeroMode.subscript,
       showSign: true,
@@ -249,8 +249,8 @@ void main() {
     }
   });
 
-  test('test custom shrin zero converter', () {
-    print('=====custom shrin zero converter=====');
+  test('test custom shrink zero converter', () {
+    print('=====custom shrink zero converter=====');
 
     /// 123456789.000000789 => '￥+123,456,789.0<₆>78元'
     final result = formatNumber(
@@ -330,8 +330,26 @@ void main() {
     }
   });
 
-  test('test precentSignFirst', () {
-    print('=====precentSignFirst=====');
+  test('test showSign for percentage', () {
+    String formatChange(String value) {
+      return formatPercentage(
+        value.d,
+        expandHundred: false,
+        precision: 2,
+        showSign: true,
+        cutInvalidZero: true,
+      );
+    }
+
+    var result = formatChange('-0.0123');
+    print(result);
+
+    result = formatChange('0.0123');
+    print(result);
+  });
+
+  test('test percentSignFirst', () {
+    print('=====percentSignFirst=====');
     var result = formatPercentage(
       0.1.d,
       precision: 2,

@@ -332,7 +332,7 @@ void main() {
     });
   });
 
-  group('befor after between same 方法测试', () {
+  group('before after between same 方法测试', () {
     test('isBeforeDate 方法测试', () {
       expect(testDate.isBeforeDate(DateTime(2025, 5, 2)), true);
     });

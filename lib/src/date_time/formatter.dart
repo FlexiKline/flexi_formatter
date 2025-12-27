@@ -23,17 +23,21 @@ part 'constants.dart';
 part 'extension.dart';
 part 'format_extension.dart';
 
-/// A utility class for DateTime operations.
+/// A utility class for DateTime operations
+/// DateTime操作的实用工具类
 class DateTimeUtils {
   DateTimeUtils._();
 
-  /// Adds the specified number of months to the given [dateTime].
+  /// Adds the specified number of months to the given [dateTime]
+  /// 将指定的月数添加到给定的[dateTime]
   ///
   /// The [months] parameter specifies the number of months to add.
   /// If the resulting month has fewer days than the original day,
   /// the day will be adjusted to the last day of the resulting month.
+  /// [months]参数指定要添加的月数。如果结果月份的天数少于原始天数，日期将调整为结果月份的最后一天。
   ///
-  /// Returns a new [DateTime] object with the added months.
+  /// Returns a new [DateTime] object with the added months
+  /// 返回添加了月份的新[DateTime]对象
   static DateTime addMonths(DateTime dateTime, int months) {
     final modMonths = months % 12;
     var newYear = dateTime.year + ((months - modMonths) ~/ 12);
@@ -55,10 +59,12 @@ class DateTimeUtils {
     );
   }
 
-  /// Gets the start day of the week based on the locale.
+  /// Gets the start day of the week based on the locale
+  /// 根据语言环境获取一周的开始日
   ///
   /// Returns a [StartOfWeek] enum value representing the start day of the week.
   /// Throws an [Exception] if the locale is not supported.
+  /// 返回表示一周开始日的[StartOfWeek]枚举值。如果语言环境不受支持，则抛出[Exception]。
   static StartOfWeek getStartOfWeek() {
     final locale = FlexiFormatter.currentLocale;
     final supportedLocale = date_intl.dateTimeSymbolMap()[locale];
@@ -77,33 +83,35 @@ class DateTimeUtils {
     };
   }
 
-  /// Calculates the difference in months between two [DateTime] objects.
+  /// Calculates the difference in months between two [DateTime] objects
+  /// 计算两个[DateTime]对象之间的月份差
   ///
-  /// The [first] and [second] parameters specify the two
-  /// dates to compare.
+  /// The [first] and [second] parameters specify the two dates to compare.
+  /// [first]和[second]参数指定要比较的两个日期。
   ///
-  /// Returns the difference in months as a [num].
+  /// Returns the difference in months as a [num]
+  /// 返回以[num]表示的月份差
   static num monthDiff(DateTime first, DateTime second) {
     if (first.day < second.day) {
       return -DateTimeUtils.monthDiff(second, first);
     }
 
-    final monthDiff = ((second.year - first.year) * 12) + (second.month - first.month);
+    final monthDifference = ((second.year - first.year) * 12) + (second.month - first.month);
 
-    final thirdDateTime = addMonths(first, monthDiff);
+    final thirdDateTime = addMonths(first, monthDifference);
     final thirdMicroseconds = thirdDateTime.microsecondsSinceEpoch;
 
     final diffMicroseconds = second.microsecondsSinceEpoch - thirdMicroseconds;
 
     double offset;
     if (diffMicroseconds < 0) {
-      final fifthDateTime = addMonths(first, monthDiff - 1);
+      final fifthDateTime = addMonths(first, monthDifference - 1);
       offset = diffMicroseconds / (thirdMicroseconds - fifthDateTime.microsecondsSinceEpoch);
     } else {
-      final fifthDateTime = addMonths(first, monthDiff + 1);
+      final fifthDateTime = addMonths(first, monthDifference + 1);
       offset = diffMicroseconds / (fifthDateTime.microsecondsSinceEpoch - thirdMicroseconds);
     }
 
-    return -(monthDiff + offset);
+    return -(monthDifference + offset);
   }
 }
