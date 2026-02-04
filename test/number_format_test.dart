@@ -14,7 +14,7 @@
 
 import 'package:decimal/decimal.dart';
 import 'package:flexi_formatter/number.dart';
-import 'package:test/test.dart' show test, expect;
+import 'package:test/test.dart' show test, expect, group;
 
 void main() {
   test('test ShrinkZeroMode', () {
@@ -111,40 +111,175 @@ void main() {
     }
   });
 
-  test('test formatPercentage', () {
+  group('test formatPercentage', () {
     print('=====formatPercentage=====');
+    test('basic', () {
+      var result = formatPercentage(0.1.d, precision: 2, cutInvalidZero: false);
+      print(result);
+      expect(result, '10.00%');
 
-    var result = formatPercentage(0.1.d, precision: 2, cutInvalidZero: false);
-    print(result);
-    expect(result, '10.00%');
+      result = formatPercentage(0.1.d, cutInvalidZero: true);
+      print(result);
+      expect(result, '10%');
 
-    result = formatPercentage(0.1.d, cutInvalidZero: true);
-    print(result);
-    expect(result, '10%');
+      result = formatPercentage(0.98765.d, precision: 2, cutInvalidZero: false);
+      print(result);
+      expect(result, '98.76%');
 
-    result = formatPercentage(0.98765.d, precision: 2, cutInvalidZero: false);
-    print(result);
-    expect(result, '98.76%');
+      result = formatPercentage(0.98765.d, cutInvalidZero: true);
+      print(result);
+      expect(result, '98.765%');
 
-    result = formatPercentage(0.98765.d, cutInvalidZero: true);
-    print(result);
-    expect(result, '98.765%');
+      result = formatPercentage(10.56.d, cutInvalidZero: true);
+      print(result);
+      expect(result, '1,056%');
 
-    result = formatPercentage(10.56.d, cutInvalidZero: true);
-    print(result);
-    expect(result, '1,056%');
+      result = formatPercentage(0.56.d, showSign: true);
+      print(result);
+      expect(result, '+56%');
 
-    result = formatPercentage(0.56.d, showSign: true);
-    print(result);
-    expect(result, '+56%');
+      result = formatPercentage(0.56.d, showSign: true, percentSignFirst: true);
+      print(result);
+      expect(result, '+%56');
 
-    result = formatPercentage(0.56.d, showSign: true, percentSignFirst: true);
-    print(result);
-    expect(result, '+%56');
+      result = formatPercentage(0.56.d, showSign: true, signFirst: false, percentSignFirst: true);
+      print(result);
+      expect(result, '%+56');
+    });
 
-    result = formatPercentage(0.56.d, showSign: true, signFirst: false, percentSignFirst: true);
-    print(result);
-    expect(result, '%+56');
+    test('with ShrinkZeroMode and precision', () {
+      // Test with subscript mode
+      var result = formatPercentage(
+        '0.0000123'.d,
+        expandHundred: false,
+        precision: 10,
+        cutInvalidZero: true,
+        shrinkZeroMode: ShrinkZeroMode.subscript,
+      );
+      print(result);
+      expect(result, '0.0₄123%');
+
+      // Test with superscript mode
+      result = formatPercentage(
+        '0.0000123'.d,
+        expandHundred: false,
+        precision: 10,
+        cutInvalidZero: true,
+        shrinkZeroMode: ShrinkZeroMode.superscript,
+      );
+      print(result);
+      expect(result, '0.0⁴123%');
+
+      // Test with curly braces mode
+      result = formatPercentage(
+        '0.0000123'.d,
+        expandHundred: false,
+        precision: 10,
+        cutInvalidZero: true,
+        shrinkZeroMode: ShrinkZeroMode.curlyBraces,
+      );
+      print(result);
+      expect(result, '0.0{4}123%');
+
+      // Test with parentheses mode
+      result = formatPercentage(
+        '0.0000123'.d,
+        expandHundred: false,
+        precision: 10,
+        cutInvalidZero: true,
+        shrinkZeroMode: ShrinkZeroMode.parentheses,
+      );
+      print(result);
+      expect(result, '0.0(4)123%');
+
+      // Test with square brackets mode
+      result = formatPercentage(
+        '0.0000123'.d,
+        expandHundred: false,
+        precision: 10,
+        cutInvalidZero: true,
+        shrinkZeroMode: ShrinkZeroMode.squareBrackets,
+      );
+      print(result);
+      expect(result, '0.0[4]123%');
+
+      // Test with expandHundred=true
+      result = formatPercentage(
+        '0.000000123'.d,
+        expandHundred: true,
+        precision: 10,
+        cutInvalidZero: true,
+        shrinkZeroMode: ShrinkZeroMode.curlyBraces,
+      );
+      print(result);
+      expect(result, '0.0{4}123%');
+
+      // Test with multiple zero groups
+      result = formatPercentage(
+        '0.000001230000012'.d,
+        expandHundred: false,
+        precision: 15,
+        cutInvalidZero: false,
+        shrinkZeroMode: ShrinkZeroMode.curlyBraces,
+      );
+      print(result);
+      expect(result, '0.0{5}1230{5}12%');
+
+      // Test without cutInvalidZero
+      result = formatPercentage(
+        '0.0000123'.d,
+        expandHundred: false,
+        precision: 10,
+        cutInvalidZero: false,
+        shrinkZeroMode: ShrinkZeroMode.subscript,
+      );
+      print(result);
+      expect(result, '0.0₄123000%');
+    });
+
+    test('with custom ShrinkZeroConverter', () {
+      // Test with custom converter
+      var result = formatPercentage(
+        '0.0000123'.d,
+        expandHundred: false,
+        precision: 10,
+        cutInvalidZero: true,
+        shrinkZeroMode: ShrinkZeroMode.custom,
+        shrinkZeroConverter: (zeroCounts) {
+          return '0<$zeroCounts>';
+        },
+      );
+      print(result);
+      expect(result, '0.0<4>123%');
+
+      // Test with custom converter using subscript
+      result = formatPercentage(
+        '0.0000123'.d,
+        expandHundred: false,
+        precision: 10,
+        cutInvalidZero: true,
+        shrinkZeroMode: ShrinkZeroMode.custom,
+        shrinkZeroConverter: (zeroCounts) {
+          return '0[${zeroCounts.subscriptNumeral}]';
+        },
+      );
+      print(result);
+      expect(result, '0.0[₄]123%');
+
+      // Test with expandHundred=true and custom converter
+      result = formatPercentage(
+        '0.000000456'.d,
+        expandHundred: true,
+        precision: 10,
+        cutInvalidZero: true,
+        shrinkZeroMode: ShrinkZeroMode.custom,
+        shrinkZeroConverter: (zeroCounts) {
+          return '0~$zeroCounts~';
+        },
+      );
+      print(result);
+      expect(result, '0.0~4~456%');
+    });
   });
 
   test('test formatPrice', () {
