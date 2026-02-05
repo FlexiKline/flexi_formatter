@@ -1,3 +1,7 @@
+## 2.0.1
+- Add `ShrinkZeroMode` and `ShrinkZeroConverter` to `formatPercentage`.
+- Add testing workflow on GitHub.
+
 ## 2.0.0
 - **BREAKING CHANGE**: Remove deprecated APIs:
   - Remove `groupSepartor` parameter from `formatNumber` (use `groupSeparator` instead).
